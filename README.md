@@ -1,4 +1,6 @@
-# Getting Started with Create React App
+## Management System
+
+This project is for developing the client management system, following the lectures provided by 동빈나.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
