@@ -8,6 +8,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import {withStyles} from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const styles = theme => ({
   root: {
@@ -21,16 +22,22 @@ const styles = theme => ({
   font:{
     fontWeight: 600,
     color: 'purple'
+  },
+  progress:{
+    margin: theme.spacing(2)
   }
 });
 
 class App extends Component{
 
   state = {
-    customers: ""
+    customers: "",
+    completed: 0
   }
 
   componentDidMount(){
+    //timer를 이용하여 0.2초마다 prgress 함수 반복실행
+    this.timer = setInterval(this.progress, 20);
     this.callApi()
       .then(res => this.setState({customers: res}))
       .catch(err => console.log(err));
@@ -42,6 +49,12 @@ class App extends Component{
     return body;
   }
 
+  //for animation of prgress bar
+  progress = () => {
+    const {completed} = this.state;
+    this.setState({completed: completed >= 100 ? 0 : completed + 1});
+  }
+  
   render(){
     const {classes} = this.props;
     console.log({classes});
@@ -72,7 +85,16 @@ class App extends Component{
                   job = {c.job}
                 ></Customer>
               )
-            }) : ""
+            }) : 
+            <TableRow>
+              
+              <TableCell colSpan = "6"//6개 열을 다 채우도록
+               align = "center">
+                 <CircularProgress className = {classes.progress} 
+                 variant = "determinate" value = {this.state.completed}> 
+                 </CircularProgress>
+              </TableCell>
+            </TableRow>
           }
           </TableBody>
         </Table>
